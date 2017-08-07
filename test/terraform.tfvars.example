@@ -1,7 +1,6 @@
 region = "us-west-2"
 environment = "sandbox"
 availability_zones = ["us-west-2a", "us-west-2b", "us-west-2c"]
-nat_eips = []
 allowed_ingress_list = []
 key_name = ""
 private_key_path = ""

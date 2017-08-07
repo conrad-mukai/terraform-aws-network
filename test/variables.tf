@@ -18,10 +18,6 @@ variable "availability_zones" {
   type = "list"
 }
 
-variable "nat_eips" {
-  type = "list"
-}
-
 variable "allowed_ingress_list" {
   type = "list"
 }
