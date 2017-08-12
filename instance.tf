@@ -3,7 +3,7 @@
  */
 
 resource "aws_instance" "bastion" {
-  count = "${length(var.availability_zones)}"
+  count = "${aws_subnet.public-subnet.count}"
   ami = "${var.bastion_ami}"
   instance_type = "${var.bastion_instance_type}"
   vpc_security_group_ids = ["${aws_security_group.bastion-security-group.id}",

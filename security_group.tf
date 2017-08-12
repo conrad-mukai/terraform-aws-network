@@ -24,7 +24,7 @@ resource "aws_security_group" "bastion-security-group" {
 }
 
 resource "aws_security_group" "web-security-group" {
-  name_prefix = "${var.environment}-${var.app_name}-cisco-web-"
+  name_prefix = "${var.environment}-${var.app_name}-web-"
   description = "allows http/https access"
   vpc_id = "${aws_vpc.vpc.id}"
   ingress {

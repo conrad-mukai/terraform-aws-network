@@ -3,7 +3,7 @@
  */
 
 resource "null_resource" "setup-bastion" {
-  count = "${length(var.availability_zones)}"
+  count = "${aws_instance.bastion.count}"
   triggers {
     bastion_id = "${element(aws_instance.bastion.*.id, count.index)}"
   }
