@@ -31,7 +31,7 @@ output "loopback_web_security_group_id" {
 }
 
 output "bastion_ips" {
-  value = "${join(",", aws_instance.bastion.*.public_ip)}"
+  value = "${aws_instance.bastion.*.public_ip}"
 }
 
 output "nat_ips" {
