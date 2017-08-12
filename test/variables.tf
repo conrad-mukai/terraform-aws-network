@@ -18,6 +18,10 @@ variable "availability_zones" {
   type = "list"
 }
 
+variable "cidr_vpc" {
+  type = "string"
+}
+
 variable "allowed_ingress_list" {
   type = "list"
 }

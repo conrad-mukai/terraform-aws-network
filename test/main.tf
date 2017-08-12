@@ -23,7 +23,7 @@ module "network" {
   source = ".."
   environment = "${var.environment}"
   app_name = "${var.app_name}"
-  cidr_vpc = "172.16.0.0/16"
+  cidr_vpc = "${var.cidr_vpc}"
   availability_zones = "${var.availability_zones}"
   nat_eips = "${aws_eip.public-ips.*.id}"
   allowed_ingress_list = "${var.allowed_ingress_list}"
