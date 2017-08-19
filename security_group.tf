@@ -46,7 +46,7 @@ resource "aws_security_group" "web-security-group" {
     protocol = "-1"
   }
   tags {
-    Name = "${var.environment}-${var.app_name}-cisco-web-sg"
+    Name = "${var.environment}-${var.app_name}-web-sg"
   }
 }
 
