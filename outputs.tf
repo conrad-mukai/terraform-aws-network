@@ -14,8 +14,8 @@ output "private_subnet_ids" {
   value = "${aws_subnet.private-subnet.*.id}"
 }
 
-output "secondary_private_subnet_ids" {
-  value = "${aws_subnet.secondary-private-subnet.*.id}"
+output "static_subnet_ids" {
+  value = "${aws_subnet.static-subnet.*.id}"
 }
 
 output "web_security_group_id" {

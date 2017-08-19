@@ -29,9 +29,9 @@ variable "cidr_private" {
   default = [4, 5, 6, 7]
 }
 
-variable "cidr_private_secondary" {
+variable "cidr_static" {
   type = "list"
-  description = "network number of /24 CIDR for secondary private subnet (to reserve IPs)."
+  description = "network number of /24 CIDR for static subnet (to reserve IPs)."
   default = [31, 63, 95, 127]
 }
 

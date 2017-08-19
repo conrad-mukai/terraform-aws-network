@@ -36,9 +36,9 @@ This module creates the following:
 | `internal_security_group_id` | security group ID for instances in the private subnet |
 | `loopback_web_security_group_id` | security group ID that grants access from NAT gateways |
 | `nat_ips` | list of IP addresses for NAT gateways |
-| `private_subnet_ids` | list of IDs for the private subnets |
-| `public_subnet_ids` | list of IDs for the public subnets |
-| `secondary_private_subnet_ids` | list of IDs for the secondary private subnets (for static IPs) |
+| `private_subnet_ids` | list of private subnet IDs |
+| `public_subnet_ids` | list of public subnet IDs |
+| `static_subnet_ids` | list of subnet IDs for static IPs |
 | `vpc_id` | VPC ID |
 | `web_security_group_id` | security group ID for external web access |
 

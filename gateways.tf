@@ -52,7 +52,7 @@ resource "aws_route_table_association" "private-route-table-association" {
   route_table_id = "${element(aws_route_table.private-route-table.*.id, count.index)}"
 }
 
-resource "aws_route_table" "secondary-private-route-table" {
+resource "aws_route_table" "static-route-table" {
   count = "${aws_nat_gateway.nat-gw.count}"
   vpc_id = "${aws_vpc.vpc.id}"
   route {
@@ -60,12 +60,12 @@ resource "aws_route_table" "secondary-private-route-table" {
     nat_gateway_id = "${element(aws_nat_gateway.nat-gw.*.id, count.index)}"
   }
   tags {
-    Name = "${var.environment}-${var.app_name}-secondary-private-subnet-route-table-${format("%02d", count.index+1)}"
+    Name = "${var.environment}-${var.app_name}-static-subnet-route-table-${format("%02d", count.index+1)}"
   }
 }
 
-resource "aws_route_table_association" "secondary-private-route-table-association" {
-  count = "${aws_subnet.secondary-private-subnet.count}"
-  subnet_id = "${element(aws_subnet.secondary-private-subnet.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.secondary-private-route-table.*.id, count.index)}"
+resource "aws_route_table_association" "static-route-table-association" {
+  count = "${aws_subnet.static-subnet.count}"
+  subnet_id = "${element(aws_subnet.static-subnet.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.static-route-table.*.id, count.index)}"
 }
