@@ -1,26 +1,20 @@
 /*
- * Provisioners for network.
+ * network provisioners
  */
 
 resource "null_resource" "setup-bastion" {
-  count = "${aws_instance.bastion.count}"
+  count = "${local.az_count}"
   triggers {
     bastion_id = "${element(aws_instance.bastion.*.id, count.index)}"
+    auth_keys = "${md5(local.authorized_keys)}"
   }
   connection {
     host = "${element(aws_instance.bastion.*.public_ip, count.index)}"
     user = "${var.bastion_user}"
-    private_key = "${file(var.private_key_path)}"
+    private_key = "${local.private_key}"
   }
   provisioner "file" {
-    content = "${data.template_file.authorized-keys-setup.rendered}"
-    destination = "/tmp/authorized-keys-setup.sh"
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/authorized-keys-setup.sh",
-      "/tmp/authorized-keys-setup.sh",
-      "rm /tmp/authorized-keys-setup.sh"
-    ]
+    content = "${local.authorized_keys}"
+    destination = ".ssh/authorized_keys"
   }
 }

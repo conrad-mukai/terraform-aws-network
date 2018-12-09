@@ -2,64 +2,71 @@
  * network variables
  */
 
-variable "environment" {
+
+# general
+
+variable "name" {
   type = "string"
-  description = "environment to configure"
+  description = "name to use in tagging"
 }
 
-variable "app_name" {
-  description = "application name"
-  default = "infra"
-}
 
-variable "cidr_vpc" {
+# subnet settings
+
+variable "vpc_cidr" {
   type = "string"
-  description = "VPC /16 CIDR block"
-}
-
-variable "cidr_public" {
-  type = "list"
-  description = "network number of /24 CIDR for public subnet"
-  default = [0, 32, 64, 96]
-}
-
-variable "cidr_private" {
-  type = "list"
-  description = "network number of /19 CIDR for private subnet"
-  default = [4, 5, 6, 7]
-}
-
-variable "cidr_static" {
-  type = "list"
-  description = "network number of /24 CIDR for static subnet (to reserve IPs)."
-  default = [31, 63, 95, 127]
+  description = "VPC CIDR block"
 }
 
 variable "availability_zones" {
   type = "list"
-  description = "availability zone list"
+  description = "list of availability zones"
 }
 
-variable "allowed_ingress_list" {
+variable "public_cidr_prefix" {
+  type = "string"
+  description = "CIDR prefix (number of bits in mask) for public subnets (-1 indicates use the max subnet size)"
+}
+
+variable "private_cidr_prefix" {
+  description = "CIDR prefix (number of bits in mask) for private subnets (-1 indicates use the max subnet size)"
+  default = -1
+}
+
+
+# security group settings
+
+variable "ssh_access" {
   type = "list"
-  description = "list of CIDR blocks allowed into VPC"
+  description = "list of CIDR blocks with ssh access"
   default = ["0.0.0.0/0"]
 }
 
-variable "allowed_egress_list" {
+variable "web_access" {
   type = "list"
-  description = "list of CIDR blocks allowed out of VPC"
+  description = "list of CIDR blocks with web access"
   default = ["0.0.0.0/0"]
 }
+
+
+# route53 settings
+
+variable "dns_domain" {
+  type = "string"
+  description = "private top level DNS domain (optional)"
+}
+
+variable "dns_ttl" {
+  description = "TTL for DNS records"
+  default = 300
+}
+
+
+# bastion settings
 
 variable "bastion_ami" {
   type = "string"
   description = "AMI for bastion"
-}
-
-variable "bastion_instance_type" {
-  description = "instance type for bastion"
-  default = "t2.micro"
 }
 
 variable "bastion_user" {
@@ -67,9 +74,9 @@ variable "bastion_user" {
   description = "default user for the bastion AMI"
 }
 
-variable "nat_eips" {
-  type = "list"
-  description = "list of EIP IDs for the NAT gateways"
+variable "bastion_instance_type" {
+  description = "instance type for bastion"
+  default = "t2.micro"
 }
 
 variable "key_name" {
@@ -79,10 +86,10 @@ variable "key_name" {
 
 variable "private_key_path" {
   type = "string"
-  description = "path to private key for for bootstrapping bastion"
+  description = "local path to private key for for bootstrapping bastion"
 }
 
-variable "authorized_keys" {
+variable "authorized_keys_path" {
   type = "string"
-  description = "public keys for SSH access into bastion"
+  description = "local path to the authorized_keys file"
 }

@@ -1,35 +1,31 @@
 /*
  * network test
- *
- * To test the module do the following:
- *   1. create terraform.tfvars from terraform.tfvars.example
- *   2. terraform init (one-time);
- *   3. terraform plan;
- *   4. terraform apply;
- *   5. test ssh to bastion; and
- *   6. terraform destroy (clean-up).
  */
 
 provider "aws" {
   region = "${var.region}"
 }
 
-resource "aws_eip" "public-ips" {
-  count = "${length(var.availability_zones)}"
-  vpc = true
+data "aws_availability_zones" "current" {}
+
+locals {
+  az_list = "${slice(data.aws_availability_zones.current.names, 0, ceil(1.0*length(data.aws_availability_zones.current.names)/2))}"
+  n_azs = "${length(local.az_list)}"
 }
 
 module "network" {
   source = ".."
-  environment = "${var.environment}"
-  app_name = "${var.app_name}"
-  cidr_vpc = "${var.cidr_vpc}"
-  availability_zones = "${var.availability_zones}"
-  nat_eips = "${aws_eip.public-ips.*.id}"
-  allowed_ingress_list = "${var.allowed_ingress_list}"
+  name = "${var.name}"
+  vpc_cidr = "172.16.0.0/20"
+  public_cidr_prefix = 28
+  private_cidr_prefix = 24
+  availability_zones = "${local.az_list}"
+  ssh_access = "${var.ssh_access}"
+  web_access = "${var.web_access}"
+  dns_domain = "${var.domain}"
   bastion_ami = "${var.bastion_ami}"
   bastion_user = "${var.bastion_user}"
   private_key_path = "${var.private_key_path}"
-  authorized_keys = "${file(var.authorized_key_path)}"
+  authorized_keys_path = "${var.authorized_key_path}"
   key_name = "${var.key_name}"
 }

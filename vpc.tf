@@ -1,11 +1,11 @@
 /*
- * vpc configuration
+ * network VPC
  */
 
 resource "aws_vpc" "vpc" {
-  cidr_block = "${var.cidr_vpc}"
+  cidr_block = "${var.vpc_cidr}"
   enable_dns_hostnames = true
   tags {
-    Name = "${var.environment}-${var.app_name}-vpc"
+    Name = "${var.name}"
   }
 }

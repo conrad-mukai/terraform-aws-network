@@ -1,34 +1,24 @@
 /*
- * subnet configurations
+ * network subnets
  */
 
-resource "aws_subnet" "public-subnet" {
-  count = "${length(var.availability_zones)}"
+resource "aws_subnet" "public" {
+  count = "${local.az_count}"
   vpc_id = "${aws_vpc.vpc.id}"
   availability_zone = "${var.availability_zones[count.index]}"
-  cidr_block = "${cidrsubnet(var.cidr_vpc, 8, var.cidr_public[count.index])}"
+  cidr_block = "${cidrsubnet(var.vpc_cidr, local.public_cidr_prefix - local.vpc_cidr_prefix, local.public_subnet_increment * count.index)}"
   map_public_ip_on_launch = true
   tags {
-    Name = "${var.environment}-${var.app_name}-public-subnet-${format("%02d", count.index+1)}"
+    Name = "${var.name}-public${format("%02d", count.index+1)}"
   }
 }
 
-resource "aws_subnet" "private-subnet" {
-  count = "${length(var.availability_zones)}"
+resource "aws_subnet" "private" {
+  count = "${local.az_count}"
   vpc_id = "${aws_vpc.vpc.id}"
   availability_zone = "${var.availability_zones[count.index]}"
-  cidr_block = "${cidrsubnet(var.cidr_vpc, 3, var.cidr_private[count.index])}"
+  cidr_block = "${cidrsubnet(var.vpc_cidr, local.private_cidr_prefix - local.vpc_cidr_prefix, local.private_subnet_offset + (local.private_subnet_increment * count.index))}"
   tags {
-    Name = "${var.environment}-${var.app_name}-private-subnet-${format("%02d", count.index+1)}"
-  }
-}
-
-resource "aws_subnet" "static-subnet" {
-  count = "${length(var.availability_zones)}"
-  vpc_id = "${aws_vpc.vpc.id}"
-  availability_zone = "${var.availability_zones[count.index]}"
-  cidr_block = "${cidrsubnet(var.cidr_vpc, 8, var.cidr_static[count.index])}"
-  tags {
-    Name = "${var.environment}-${var.app_name}-static-subnet-${format("%02d", count.index+1)}"
+    Name = "${var.name}-private${format("%02d", count.index+1)}"
   }
 }

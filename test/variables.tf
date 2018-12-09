@@ -1,29 +1,25 @@
 /*
- * test variables
+ * network test variables
  */
 
 variable "region" {
   type = "string"
 }
 
-variable "environment" {
-  default = "sandbox"
+variable "name" {
+  default = "demo"
 }
 
-variable "app_name" {
-  default = "infra"
-}
-
-variable "availability_zones" {
+variable "ssh_access" {
   type = "list"
 }
 
-variable "cidr_vpc" {
-  type = "string"
+variable "web_access" {
+  type = "list"
 }
 
-variable "allowed_ingress_list" {
-  type = "list"
+variable "domain" {
+  default = "small.example.com"
 }
 
 variable "key_name" {
