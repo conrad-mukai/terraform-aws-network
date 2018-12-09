@@ -12,7 +12,6 @@ To run the test do the following:
    (something like `~/.ssh/id_rsa.pub`).
 1. Run `terraform init`.
 1. Run `terraform apply`.
-1. Enter the AWS region when prompted.
 1. The code will create a VPC.
 
 ## Details
