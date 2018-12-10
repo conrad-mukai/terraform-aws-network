@@ -7,6 +7,9 @@ resource "aws_route53_zone" "dns" {
   vpc {
     vpc_id = "${aws_vpc.vpc.id}"
   }
+  lifecycle {
+    ignore_changes = ["vpc"]
+  }
 }
 
 resource "aws_route53_record" "bastion" {
