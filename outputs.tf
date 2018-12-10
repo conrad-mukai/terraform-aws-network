@@ -38,10 +38,6 @@ output "route53_zone_id" {
   value = "${aws_route53_zone.dns.zone_id}"
 }
 
-output "bastion_public_ips" {
+output "bastion_ips" {
   value = "${aws_instance.bastion.*.public_ip}"
-}
-
-output "bastion_private_fqdns" {
-  value = "${aws_route53_record.bastion.*.fqdn}"
 }

@@ -7,6 +7,7 @@ resource "null_resource" "setup-bastion" {
   triggers {
     bastion_id = "${element(aws_instance.bastion.*.id, count.index)}"
     auth_keys = "${md5(local.authorized_keys)}"
+    hostname_id = "${md5(join(",", module.bastion-hostname.resource_ids))}"
   }
   connection {
     host = "${element(aws_instance.bastion.*.public_ip, count.index)}"

@@ -13,7 +13,6 @@ output "network" {
     web_security_group_id = "${module.network.web_security_group_id}"
     internal_security_group_id = "${module.network.internal_security_group_id}"
     route53_zone_id = "${module.network.route53_zone_id}"
-    bastion_ips = "${module.network.bastion_public_ips}"
-    bastion_fqdns = "${module.network.bastion_private_fqdns}"
+    bastion_ips = "${module.network.bastion_ips}"
   }
 }
