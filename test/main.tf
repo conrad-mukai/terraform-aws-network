@@ -10,7 +10,6 @@ data "aws_availability_zones" "current" {}
 
 locals {
   az_list = "${slice(data.aws_availability_zones.current.names, 0, ceil(1.0*length(data.aws_availability_zones.current.names)/2))}"
-  n_azs = "${length(local.az_list)}"
 }
 
 module "network" {
