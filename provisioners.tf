@@ -10,7 +10,7 @@ resource "null_resource" "setup-bastion" {
     hostname_id = "${md5(join(",", module.bastion-hostname.resource_ids))}"
   }
   connection {
-    host = "${element(aws_instance.bastion.*.public_ip, count.index)}"
+    host = "${data.aws_eip.bastion.*.public_ip[count.index]}"
     user = "${var.bastion_user}"
     private_key = "${local.private_key}"
   }

@@ -15,3 +15,8 @@ locals {
   private_key = "${file(var.private_key_path)}"
   authorized_keys = "${file(var.authorized_keys_path)}"
 }
+
+data "aws_eip" "bastion" {
+  count = "${local.az_count}"
+  id = "${var.bastion_eip_ids[count.index]}"
+}
