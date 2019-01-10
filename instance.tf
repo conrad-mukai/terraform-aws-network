@@ -17,3 +17,9 @@ resource "aws_instance" "bastion" {
     Name = "${var.name}-bastion${format("%02d", count.index+1)}"
   }
 }
+
+resource "aws_eip_association" "bastion" {
+  count = "${local.az_count}"
+  allocation_id = "${var.bastion_eip_ids[count.index]}"
+  instance_id = "${aws_instance.bastion.*.id[count.index]}"
+}

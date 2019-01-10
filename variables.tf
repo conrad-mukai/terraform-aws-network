@@ -93,3 +93,16 @@ variable "authorized_keys_path" {
   type = "string"
   description = "local path to the authorized_keys file"
 }
+
+
+# elastic ips
+
+variable "nat_eip_ids" {
+  type = "list"
+  description = "list of elastic IP allocation IDs for NAT gateways"
+}
+
+variable "bastion_eip_ids" {
+  type = "list"
+  description = "list of elastic IP allocation IDs for bastions"
+}

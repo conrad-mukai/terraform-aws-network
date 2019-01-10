@@ -118,12 +118,14 @@ plugin and the ssh -D option.
 | `authorized_keys_path` | local path to the authorized_keys file | |
 | `availability_zones` | list of availability zones | |
 | `bastion_ami` | AMI for bastion | |
+| `bastion_eip_ids` | list of elastic IP allocation IDs for bastions | |
 | `bastion_instance_type` | instance type for bastion | t2.micro |
 | `bastion_user` | default user for the bastion AMI | |
 | `dns_domain` | private top level DNS domain | |
 | `dns_ttl` | TTL for DNS records | 300 |
 | `key_name` | key pair name to bootstrap bastion | |
 | `name` | name to use in tagging | |
+| `nat_eip_ids` | list of elastic IP allocation IDs for NAT gateways | |
 | `private_cidr_prefix` | CIDR prefix (number of bits in mask) for private subnets (-1 indicates use the max subnet size) | -1 |
 | `private_key_path` | local path to private key for for bootstrapping bastion | |
 | `public_cidr_prefix` | CIDR prefix (number of bits in mask) for public subnets (-1 indicates use the max subnet size) | |

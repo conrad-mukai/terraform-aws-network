@@ -10,6 +10,18 @@ data "aws_availability_zones" "current" {}
 
 locals {
   az_list = "${slice(data.aws_availability_zones.current.names, 0, ceil(1.0*length(data.aws_availability_zones.current.names)/2))}"
+  az_count = "${length(local.az_list)}"
+}
+
+
+resource "aws_eip" "nat_eips" {
+  count = "${local.az_count}"
+  vpc = true
+}
+
+resource "aws_eip" "bastion_eips" {
+  count = "${local.az_count}"
+  vpc = true
 }
 
 module "network" {
@@ -27,4 +39,6 @@ module "network" {
   private_key_path = "${var.private_key_path}"
   authorized_keys_path = "${var.authorized_key_path}"
   key_name = "${var.key_name}"
+  nat_eip_ids = "${aws_eip.nat_eips.*.id}"
+  bastion_eip_ids = "${aws_eip.bastion_eips.*.id}"
 }
