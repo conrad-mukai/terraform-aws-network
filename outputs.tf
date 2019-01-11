@@ -39,5 +39,5 @@ output "route53_zone_id" {
 }
 
 output "bastion_ips" {
-  value = "${aws_instance.bastion.*.public_ip}"
+  value = "${data.aws_eip.bastion.*.public_ip}"
 }
