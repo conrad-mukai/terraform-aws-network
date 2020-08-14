@@ -108,9 +108,9 @@ plugin and the ssh -D option.
 | internal_security_group_id | security group ID for internal access |
 | nat_ips | list of public IP addresses for NAT gateways |
 | private_route_table_ids | list of private route table IDs |
-| private_subnet_ids | list of private subnet IDs |
+| private_subnets | list of private subnet IDs and addresses |
 | public_route_table_id | public route table ID |
-| public_subnet_ids | list of public subnet IDs and addresses |
+| public_subnets | list of public subnet IDs and addresses |
 | vpc_id | VPC ID |
 
 ## Tests
