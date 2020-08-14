@@ -2,6 +2,11 @@
 
 Test for the Terraform network module.
 
+## Warning
+
+This test will create instances and NAT gateways. These resources will incur a
+cost.
+
 ## Quick Start
 
 To run the test do the following:
@@ -16,18 +21,8 @@ To run the test do the following:
 
 ## Details
 
-The test determines a list of availability zones for the specified region, and
-creates a list with half the availabilty zones. For regions with an odd number
-of availability zones round up (so for regions with 3 availability zones the
-list will contain 2).
-
-We then produce a network with the following parameters:
-
-| Variable | Value |
-| -------- | ----- |
-| `vpc_cidr` | 172.16.0.0/20 |
-| `public_cidr_prefix` | 28 |
-| `private_cidr_prefix` | 24 |
+The test determines the names of the availability zones for a given region and
+creates a VPC that spans all of them.
 
 ## Experimentation
 

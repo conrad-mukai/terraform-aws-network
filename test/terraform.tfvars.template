@@ -2,7 +2,6 @@
 
 region = ""
 ssh_access = []
-web_access = []
 key_name = ""
 private_key_path = ""
 authorized_key_path = ""

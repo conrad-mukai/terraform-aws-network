@@ -113,40 +113,34 @@ plugin and the ssh -D option.
 
 ## Input Variables
 
-| Name | Description | Default |
-| ---- | ----------- | ------- |
-| `authorized_keys_path` | local path to the authorized_keys file | |
-| `availability_zones` | list of availability zones | |
-| `bastion_ami` | AMI for bastion | |
-| `bastion_eip_ids` | list of elastic IP allocation IDs for bastions | |
-| `bastion_instance_type` | instance type for bastion | t2.micro |
-| `bastion_user` | default user for the bastion AMI | |
-| `dns_domain` | private top level DNS domain | |
-| `dns_ttl` | TTL for DNS records | 300 |
-| `key_name` | key pair name to bootstrap bastion | |
-| `name` | name to use in tagging | |
-| `nat_eip_ids` | list of elastic IP allocation IDs for NAT gateways | |
-| `private_cidr_prefix` | CIDR prefix (number of bits in mask) for private subnets (-1 indicates use the max subnet size) | -1 |
-| `private_key_path` | local path to private key for for bootstrapping bastion | |
-| `public_cidr_prefix` | CIDR prefix (number of bits in mask) for public subnets (-1 indicates use the max subnet size) | |
-| `ssh_access` | list of CIDR blocks with ssh access | ["0.0.0.0/0"] |
-| `vpc_cidr` | VPC CIDR block | |
-| `web_access` | list of CIDR blocks with web access | ["0.0.0.0/0"] |
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| authorized_keys_path | string | local path to the authorized_keys file |  |
+| availability_zones | list(string) | list of availability zones |  |
+| bastion_ami | string | AMI for bastion |  |
+| bastion_instance_type | string | instance type for bastion | t3.micro |
+| bastion_user | string | default user for the bastion AMI |  |
+| dns_domain | string | private top level DNS domain (optional) | "" |
+| dns_ttl | number | TTL for DNS records | 300 |
+| key_name | string | key pair name to bootstrap bastion |  |
+| name | string | name to use in tagging |  |
+| private_key_path | string | local path to private key for for bootstrapping bastion |  |
+| ssh_access | list(string) | list of CIDR blocks with ssh access | ["0.0.0.0/0"] |
+| vpc_cidr | string | VPC CIDR block |  |
 
 ## Outputs
 
 | Name | Description |
 | ---- | ----------- |
-| `bastion_ips` | list of public IP addresses for bastions |
-| `internal_security_group_id` | security group ID for internal access |
-| `nat_ips` | list of public IP addresses for NAT gateways |
-| `private_route_table_ids` | list of private route table IDs |
-| `private_subnet_ids` | list of private subnet IDs |
-| `public_route_table_id` | public route table ID |
-| `public_subnet_ids` | list of public subnet IDs |
-| `route53_zone_id` | Route53 private zone ID |
-| `vpc_id` | VPC ID |
-| `web_security_group_id` | security group ID for external web access |
+| bastion_ips | list of public IP addresses for bastions |
+| internal_security_group_id | security group ID for internal access |
+| nat_ips | list of public IP addresses for NAT gateways |
+| private_route_table_ids | list of private route table IDs |
+| private_subnet_ids | list of private subnet IDs |
+| public_route_table_id | public route table ID |
+| public_subnet_ids | list of public subnet IDs |
+| route53_zone_id | Route53 private zone ID |
+| vpc_id | VPC ID |
 
 ## Tests
 
