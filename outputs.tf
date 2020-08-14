@@ -12,6 +12,7 @@ output public_subnets {
   value = [
     for i in range(local.az_count): {
       id = aws_subnet.public[i].id
+      availability_zone = aws_subnet.public[i].availability_zone
       cidr_block = aws_subnet.public[i].cidr_block
     }
   ]
@@ -22,6 +23,7 @@ output private_subnets {
   value = [
     for i in range(local.az_count): {
       id = aws_subnet.private[i].id
+      availability_zone = aws_subnet.private[i].availability_zone
       cidr_block = aws_subnet.private[i].cidr_block
     }
   ]
