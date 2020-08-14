@@ -8,7 +8,7 @@ output vpc_id {
 }
 
 output public_subnets {
-  description = "list of public subnet IDs and addresses"
+  description = "list of public subnet IDs, CIDRs, and availability zones"
   value = [
     for i in range(local.az_count): {
       id = aws_subnet.public[i].id
@@ -19,7 +19,7 @@ output public_subnets {
 }
 
 output private_subnets {
-  description = "list of private subnet IDs and addresses"
+  description = "list of private subnet IDs, CIDRs, and availability zones"
   value = [
     for i in range(local.az_count): {
       id = aws_subnet.private[i].id

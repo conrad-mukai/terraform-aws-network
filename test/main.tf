@@ -8,7 +8,7 @@ provider aws {
 
 data aws_availability_zones current {}
 
-module "network" {
+module network {
   source = "./.."
   name = var.name
   vpc_cidr = var.vpc_cidr
