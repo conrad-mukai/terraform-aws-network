@@ -11,8 +11,7 @@ following:
 1. public and private subnets;
 1. NAT gateways;
 1. route tables;
-1. security groups;
-1. private Route53 zone; and
+1. security groups; and
 1. bastion hosts.
 
 The following sub-sections describe these components in detail.
@@ -20,27 +19,14 @@ The following sub-sections describe these components in detail.
 ### VPC and Subnets
 
 The module creates a public and private subnet in each availability zone. The
-VPC CIDR is split into 2 halves. The public subnets are placed in the first
-half and the private subnets in the second half. Each half is then divided by
-a power of 2 large enough to house a subnet in each availability zone.
+subnets are sized using the VPC CIDR and the number of availability zones
+specified:
 
-For example, starting with a VPC CIDR of 172.18.0.0/16, it splits into 2
-address spaces 172.18.0.0-172.18.127.255 and 172.18.128.0-172.18.255.255.
-Specifying 3 availability zones requires that each half is divided into 4 parts
-since 4 is the lowest power of 2 that accommodates 3 availability zones. A
-subnet is placed in the first 3 parts and the 4th is left unused. The actual
-size of each subnet is determined by `public_cidr_prefix` and
-`private_cidr_prefix` which are the number of bits in each subnet CIDR mask. If
--1 is specified the subnet occupies the entire address space.
-
-Continuing with our example if `public_cidr_prefix` is set to 24 and
-`private_cidr_prefix` is -1 then the result is:
-
-| AZ1 | AZ2 | AZ3 | N/A |
-| --- | --- | --- | --- |
-| public subnet 1 (172.18.0.0/24)<br>172.18.0.0-172.18.0.255 | public subnet 2 (172.18.32.0/24)<br>172.18.32.0-172.18-32.255 | public subnet 3 (172.18.64.0/24)<br>172.18.64.0-172.64.255 | unused (172.18.96.0/24)<br>172.18.96.0-172.18.96.255 |
-| unused<br>172.18.1.0-172.18.31.255 | unused<br>172.18.33.0-172.18.63.255 | unused<br>172.18.65.0-172.95.255 | unused<br>172.18.97.0-172.18.127.255 |
-| private subnet 1 (172.18.128.0/19)<br>172.18.128.0-172.18.159.255 | private subnet 2 (172.18.160.0/19)<br>172.18.160.0-172.18.191.255 | private subnet 3 (172.18.192.0/19)<br>172.18.192.0-172.18.223.255 | unused (172.18.224.0/19)<br>172.18.224.0-172.18.255.255 |
+| Number of Availability Zones | Public Subnet Size (Fraction of VPC) | Private Subnet Size (Fraction of VPC) |
+| ---------------------------- | ------------------------------------ | ------------------------------------- |
+| 1 | 1/4 | 1/2 |
+| 2,3 | 1/16 | 1/4 |
+| 4,5,6 | 1/64 | 1/8 |
 
 ### Gateways and Routing Tables
 
@@ -53,32 +39,20 @@ VPC peering connection is established.
 
 ### Security Groups
 
-The module creates 3 security groups:
+The module creates 2 security groups:
 
 | Security Group | Description |
 | -------------- | ----------- |
 | bastion | Defines SSH access to the public bastion servers. Access should only be granted to gateways used by admins. |
 | internal | Defines access within the VPC. This group should be updated when a VPC peering connection is established. The security group also contains an egress rule for all protocols and all addresses. |
-| web | Defines HTTP and HTTPS access to public endpoints. Development clouds should grant limited access (gateways used by employees and partners). Production should grant access to the Internet. |
-
-### Route53 DNS Zone
-
-The module creates a private Route53 DNS zone. Records for the bastion servers
-are added.
 
 ### Bastions
 
 To limit ssh access to specific users the only public servers with port 22 open
-are the bastion servers. These servers are brought up with an AWS public key,
-but that key is replaced with an authorized_key file containing a list of
-users' personal public keys. Doing this improves security in 2 ways. First
-access is only granted if an admin adds a user's key to the bastion. A single
-key is more likely to be shared, so access becomes unmanaged. Revocation of a
-shared key is also problematic. If ssh access is granted through a shared key
-then revocation requires that a new key be generated and re-distributed to all
-users except for the one whose access is being revoked. If every user had an
-individual public key on a bastion then access is revoked by simply removing
-that user's key.
+are the bastion servers. These servers are brought up with an AWS key pair.
+To restrict access this key should not be shared. Instead users who are granted
+access must submit a public ssh key. This key will allow access to a `bastion`
+user on the servers.
 
 A shared ssh key should be used for internal access. With this type of
 configuration, the `~/.ssh/config` file can use the bastion as a proxy server.
@@ -91,7 +65,7 @@ The following ssh config blocks would define proxy access:
 
     HostName bastion
         Host 35.0.0.1
-        User ec2-user
+        User bastion
         IdentityFile ~/.ssh/my-key.pem
     
     HostName 172.16.*
@@ -105,7 +79,7 @@ would simply enter:
 
     ssh 172.16.0.6
 
-This transparently authenticates you at the bastion and then tunnel through to
+This transparently authenticates you at the bastion and then tunnels through to
 the web server. There are many other tricks you can play with the bastion such
 as creating tunnels for other tools such as command line SQL clients or web
 browsers with the ssh -L option. Or do full on SOCKS proxy with the FoxyProxy
@@ -120,8 +94,6 @@ plugin and the ssh -D option.
 | bastion_ami | string | AMI for bastion |  |
 | bastion_instance_type | string | instance type for bastion | t3.micro |
 | bastion_user | string | default user for the bastion AMI |  |
-| dns_domain | string | private top level DNS domain (optional) | "" |
-| dns_ttl | number | TTL for DNS records | 300 |
 | key_name | string | key pair name to bootstrap bastion |  |
 | name | string | name to use in tagging |  |
 | private_key_path | string | local path to private key for for bootstrapping bastion |  |
@@ -138,8 +110,7 @@ plugin and the ssh -D option.
 | private_route_table_ids | list of private route table IDs |
 | private_subnet_ids | list of private subnet IDs |
 | public_route_table_id | public route table ID |
-| public_subnet_ids | list of public subnet IDs |
-| route53_zone_id | Route53 private zone ID |
+| public_subnet_ids | list of public subnet IDs and addresses |
 | vpc_id | VPC ID |
 
 ## Tests

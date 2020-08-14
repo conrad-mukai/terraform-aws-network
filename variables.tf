@@ -33,21 +33,6 @@ variable ssh_access {
 }
 
 
-# route53 settings
-
-variable dns_domain {
-  type = string
-  description = "private top level DNS domain (optional)"
-  default = ""
-}
-
-variable dns_ttl {
-  type = number
-  description = "TTL for DNS records"
-  default = 300
-}
-
-
 # bastion settings
 
 variable bastion_ami {

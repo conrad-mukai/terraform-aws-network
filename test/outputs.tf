@@ -11,7 +11,6 @@ output network {
     public_route_table_id = module.network.public_route_table_id
     private_route_table_ids = module.network.private_route_table_ids
     internal_security_group_id = module.network.internal_security_group_id
-    route53_zone_id = module.network.route53_zone_id
     bastion_ips = module.network.bastion_ips
   }
 }

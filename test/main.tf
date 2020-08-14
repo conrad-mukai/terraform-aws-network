@@ -14,7 +14,6 @@ module "network" {
   vpc_cidr = var.vpc_cidr
   availability_zones = data.aws_availability_zones.current.names
   ssh_access = var.ssh_access
-  #dns_domain = var.domain
   bastion_ami = var.bastion_ami
   bastion_user = var.bastion_user
   private_key_path = var.private_key_path

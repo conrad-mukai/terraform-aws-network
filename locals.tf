@@ -8,7 +8,6 @@ locals {
   public_subnet_new_bits = 2 * local.private_subnet_new_bits
   public_subnet_cidrs = [for i in range(local.az_count): cidrsubnet(var.vpc_cidr, local.public_subnet_new_bits, i)]
   private_subnet_cidrs = [for i in range(local.az_count): cidrsubnet(var.vpc_cidr, local.private_subnet_new_bits, i+1)]
-  enable_dns = length(var.dns_domain) > 0
   authorized_keys = file(var.authorized_keys_path)
   private_key = file(var.private_key_path)
 }

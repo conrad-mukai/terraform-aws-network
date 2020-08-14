@@ -18,10 +18,6 @@ variable ssh_access {
   type = list(string)
 }
 
-variable domain {
-  default = "demo.example.com"
-}
-
 variable key_name {
   type = string
 }
