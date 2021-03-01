@@ -35,7 +35,7 @@ resource aws_vpc this {
 
 locals {
   az_count = length(var.availability_zones)
-  private_subnet_new_bits = local.az_count == 1 ? 1 : local.az_count <= 3 ? 2 : 3
+  private_subnet_new_bits = floor(log(local.az_count, 2)) + 1
   public_subnet_new_bits = 2 * local.private_subnet_new_bits
   public_subnet_cidrs = [for i in range(local.az_count): cidrsubnet(var.vpc_cidr, local.public_subnet_new_bits, i)]
   private_subnet_cidrs = [for i in range(local.az_count): cidrsubnet(var.vpc_cidr, local.private_subnet_new_bits, i+1)]
