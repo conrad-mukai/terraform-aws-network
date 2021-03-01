@@ -6,7 +6,7 @@ Create and configure a network in AWS.
 
 This figure displays a sample layout created by this module.
 
-![network](images/network.png)
+![network](https://raw.githubusercontent.com/conrad-mukai/terraform-aws-network/master/images/network.png)
 
 Given a VPC CIDR of 172.16.0.0/16 here is the address allocation:
 
