@@ -4,7 +4,7 @@
 
 output vpc_id {
   description = "VPC ID"
-  value = aws_vpc.vpc.id
+  value = aws_vpc.this.id
 }
 
 output public_subnets {
@@ -31,7 +31,7 @@ output private_subnets {
 
 output nat_ips {
   description = "list of public IP addresses for NAT gateways"
-  value = aws_nat_gateway.nat-gw.*.public_ip
+  value = aws_nat_gateway.this.*.public_ip
 }
 
 output public_route_table_id {
@@ -51,5 +51,5 @@ output internal_security_group_id {
 
 output bastion_ips {
   description = "list of public IP addresses for bastions"
-  value = aws_eip.bastion.*.public_ip
+  value = aws_instance.bastion[*].public_ip
 }

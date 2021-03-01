@@ -38,6 +38,7 @@ fabric.properties
 .terraform
 terraform.tfstate*
 terraform.tfvars
+examples/all-availability-zones/.terraform.lock.hcl
 
 # Mac
 .DS_Store

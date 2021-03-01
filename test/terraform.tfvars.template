@@ -1,9 +1,0 @@
-# network test parameters
-
-region = ""
-ssh_access = []
-key_name = ""
-private_key_path = ""
-authorized_key_path = ""
-bastion_ami = ""
-bastion_user = ""

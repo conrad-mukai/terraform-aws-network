@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# setup a guest user
+
+adduser guest
+mkdir ~guest/.ssh
+chown guest:guest ~guest/.ssh

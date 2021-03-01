@@ -1,0 +1,7 @@
+# network example parameters
+
+region = ""
+bastion_access = []
+key_name = ""
+private_key = ""
+authorized_key = ""

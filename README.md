@@ -2,13 +2,32 @@
 
 Create and configure a network in AWS.
 
+## Layout
+
+This figure displays a sample layout created by this module.
+
+![network](images/network.png)
+
+Given a VPC CIDR of 172.16.0.0/16 here is the address allocation:
+
+| Item | CIDR |
+| ---- | ---- |
+| VPC | 172.16.0.0/16 |
+| Public Subnet 1 | 172.16.0.0/20 |
+| Public Subnet 2 | 172.16.16.0/20 |
+| Public Subnet 3 | 172.16.32.0/20 |
+| Unused | 172.16.48.0/20 |
+| Private Subnet 1 | 172.16.64.0/18 |
+| Private Subnet 2 | 172.16.128.0/18 |
+| Private Subnet 3 | 172.16.192.0/18 |
+
 ## Description
 
 Given a VPC CIDR and a list of availability zones, this module creates the
 following:
 1. VPC;
-1. internet gateway;
 1. public and private subnets;
+1. internet gateway;
 1. NAT gateways;
 1. route tables;
 1. security groups; and
@@ -18,8 +37,8 @@ The following sub-sections describe these components in detail.
 
 ### VPC and Subnets
 
-The module creates a public and private subnet in each availability zone. The
-subnets are sized using the VPC CIDR and the number of availability zones
+The module creates a VPC and public/private subnets in each availability zone.
+The subnets are sized using the VPC CIDR and the number of availability zones
 specified:
 
 | Number of Availability Zones | Public Subnet Size (Fraction of VPC) | Private Subnet Size (Fraction of VPC) |
@@ -30,12 +49,32 @@ specified:
 
 ### Gateways and Routing Tables
 
-The module creates 1 internet gateway and a NAT gateway in each public subnet.
-The routing table for the public subnets directs outbound traffic to the
-internet gateway. The routing tables for each private subnet direct outbound
-traffic to the NAT gateway in its availabilty zone which in turn directs
-traffic to the internet gateway. The routing tables should be updated when a
-VPC peering connection is established.
+The module creates 1 internet gateway and one or more NAT gateways. The routing
+table for the public subnets directs outbound traffic to the internet gateway.
+The routing tables for each private subnet direct outbound traffic to a NAT
+gateway which in turn directs traffic to the internet gateway.
+
+The default is to create one NAT gateway, but if a high level of traffic passes
+through the gateway data transfer costs can be excessive. To alleviate this
+more NAT gateways can be created to reduce traffic between availability zones.
+The rule of thumb is one NAT gateway costs the same as 1.6 TB/month of data
+transfer. For example, when traffic reaches 1.6 TB/month through the gateway
+then it pays to add a second one. When traffic reaches 3.2 TB/month then a
+third should be added. This continues until every availability zone has a NAT
+gateway, at which point the intra-region traffic for NAT gateways is zero.
+
+The module also creates an elastic IP for every NAT gateway. Since the public
+IP address is often shared with outside organizations to permit access from
+your VPC, it would be extremely disruptive if the public IP address were to
+accidentally be lost. For this reason the elastic IPs for NAT gateways cannot
+be deleted through Terraform. If you must destroy the resources created by this
+module, then you must first remove the elastic IPs from the Terraform state and
+then run `terraform destroy`:
+
+    terraform state rm module.my-network.aws_eip.nat_gateways
+    terraform destroy -target module.my-network
+
+You can then release the elastic IPs manually in the AWS console. 
 
 ### Security Groups
 
@@ -51,8 +90,9 @@ The module creates 2 security groups:
 To limit ssh access to specific users the only public servers with port 22 open
 are the bastion servers. These servers are brought up with an AWS key pair.
 To restrict access this key should not be shared. Instead users who are granted
-access must submit a public ssh key. This key will allow access to a `bastion`
-user on the servers.
+access must submit a public ssh key. This key will allow access to a `guest`
+user on the bastions. Doing this allows administrators to grant and revoke
+access to users independently.
 
 A shared ssh key should be used for internal access. With this type of
 configuration, the `~/.ssh/config` file can use the bastion as a proxy server.
@@ -65,7 +105,7 @@ The following ssh config blocks would define proxy access:
 
     HostName bastion
         Host 35.0.0.1
-        User bastion
+        User guest
         IdentityFile ~/.ssh/my-key.pem
     
     HostName 172.16.*
@@ -84,35 +124,3 @@ the web server. There are many other tricks you can play with the bastion such
 as creating tunnels for other tools such as command line SQL clients or web
 browsers with the ssh -L option. Or do full on SOCKS proxy with the FoxyProxy
 plugin and the ssh -D option.
-
-## Input Variables
-
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| authorized_keys_path | string | local path to the authorized_keys file |  |
-| availability_zones | list(string) | list of availability zones |  |
-| bastion_ami | string | AMI for bastion |  |
-| bastion_instance_type | string | instance type for bastion | t3.micro |
-| bastion_user | string | default user for the bastion AMI |  |
-| key_name | string | key pair name to bootstrap bastion |  |
-| name | string | name to use in tagging |  |
-| private_key_path | string | local path to private key for for bootstrapping bastion |  |
-| ssh_access | list(string) | list of CIDR blocks with ssh access | ["0.0.0.0/0"] |
-| vpc_cidr | string | VPC CIDR block |  |
-
-## Outputs
-
-| Name | Description |
-| ---- | ----------- |
-| bastion_ips | list of public IP addresses for bastions |
-| internal_security_group_id | security group ID for internal access |
-| nat_ips | list of public IP addresses for NAT gateways |
-| private_route_table_ids | list of private route table IDs |
-| private_subnets | list of private subnet IDs, CIDRs, and availability zones |
-| public_route_table_id | public route table ID |
-| public_subnets | list of public subnet IDs, CIDRs, and availability zones |
-| vpc_id | VPC ID |
-
-## Tests
-
-See test/README.md.
