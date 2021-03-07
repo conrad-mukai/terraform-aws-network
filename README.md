@@ -42,7 +42,7 @@ The subnets are sized using the VPC CIDR and the number of availability zones
 specified:
 
 | Number of Availability Zones | Public Subnet Size (Fraction of VPC) | Private Subnet Size (Fraction of VPC) |
-| ---------------------------- | ------------------------------------ | ------------------------------------- |
+| :--------------------------: | :----------------------------------: | :-----------------------------------: |
 | 1 | 1/4 | 1/2 |
 | 2,3 | 1/16 | 1/4 |
 | 4,5,6 | 1/64 | 1/8 |
