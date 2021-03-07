@@ -34,7 +34,7 @@ variable private_key {
   description = "local path to the ssh private key from the AWS key pair"
 }
 
-variable authorized_key {
+variable authorized_keys {
   type = string
   description = "local path to list of ssh public keys granting guest bastion access"
 }

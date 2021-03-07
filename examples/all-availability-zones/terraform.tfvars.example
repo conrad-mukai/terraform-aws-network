@@ -4,4 +4,4 @@ region = ""
 bastion_access = []
 key_name = ""
 private_key = ""
-authorized_key = ""
+authorized_keys = ""

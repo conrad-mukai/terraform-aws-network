@@ -9,7 +9,7 @@ To run the example do the following:
 1. Create a `terraform.tfvars` file from `terraform.tfvars.example`.
 1. Fill in all the empty fields in `terraform.tfvars`. You should set
    `private_key` to the path for the private key that corresponds to the
-   `key_name` parameter. Set `authorized_key` to a personal public key
+   `key_name` parameter. Set `authorized_keys` to a personal public key
    (something like `~/.ssh/id_rsa.pub`).
 1. Run `terraform init`.
 1. Run `terraform apply`.

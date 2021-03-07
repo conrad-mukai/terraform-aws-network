@@ -30,7 +30,7 @@ module network {
   availability_zones = data.aws_availability_zones.current.names
   bastion_access = var.bastion_access
   private_key = var.private_key
-  authorized_keys = var.authorized_key
+  authorized_keys = var.authorized_keys
   key_name = var.key_name
 }
 
